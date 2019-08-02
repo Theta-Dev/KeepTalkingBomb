@@ -42,8 +42,9 @@ uint8_t indicators;
 #include "MSimon.h"
 #include "MKeypad.h"
 #include "MMaze.h"
+#include "MMorse.h"
 
-#define N_MODULE 7
+#define N_MODULE 8
 Module* modules[N_MODULE];
 
 
@@ -58,11 +59,12 @@ void gameBegin()
     // Initialize modules
     modules[0] = new MTimer();
     modules[1] = new MPassword();
-    modules[2] = new MWire();
-    modules[3] = new MButton();
-    modules[4] = new MSimon();
-    modules[5] = new MKeypad();
-    modules[6] = new MMaze();
+    modules[2] = new MMorse();
+    modules[3] = new MWire();
+    modules[4] = new MButton();
+    modules[5] = new MSimon();
+    modules[6] = new MKeypad();
+    modules[7] = new MMaze();
 }
 
 /*
@@ -111,7 +113,7 @@ void gameReset()
     // Reset all modules
     for(uint8_t i=0; i<N_MODULE; i++) {
         // Enable all modules (tmp)
-        if(i != 2) modules[i]->state = 1;
+        if(i != 1 && i != 3) modules[i]->state = 1;
 
         if(modules[i]->state) modules[i]->reset();
     }

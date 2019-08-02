@@ -244,25 +244,26 @@ public:
             }
         }
 
-        if(!act) return;
-        
-        // Display selected characters
-        dpPwd.clearDisplay();
+        if(act)
+        {
+            // Display selected characters
+            dpPwd.clearDisplay();
 
-        for(uint8_t n=0; n<PWD_NUM_CHARS; n++) {
-            dpPwd.drawChar(28*n, 20, characters[n][selectors[n]], WHITE, BLACK, 3);
+            for(uint8_t n=0; n<PWD_NUM_CHARS; n++) {
+                dpPwd.drawChar(28*n, 20, characters[n][selectors[n]], WHITE, BLACK, 3);
+            }
+
+            // Display arrows
+            for(uint8_t n=0; n<PWD_NUM_CHARS; n++) {
+                if(bitRead(arrows[0], n)) dpPwd.fillTriangle(28*n, 7, 28*n + 14, 7, 28*n + 7, 0, WHITE);
+                else dpPwd.drawTriangle(28*n, 7, 28*n + 14, 7, 28*n + 7, 0, WHITE);
+
+                if(bitRead(arrows[1], n)) dpPwd.fillTriangle(28*n, 56, 28*n + 14, 56, 28*n + 7, 63, WHITE);
+                dpPwd.drawTriangle(28*n, 56, 28*n + 14, 56, 28*n + 7, 63, WHITE);
+            }
+
+            dpPwd.display();
+            act = false;
         }
-
-        // Display arrows
-        for(uint8_t n=0; n<PWD_NUM_CHARS; n++) {
-            if(bitRead(arrows[0], n)) dpPwd.fillTriangle(28*n, 7, 28*n + 14, 7, 28*n + 7, 0, WHITE);
-            else dpPwd.drawTriangle(28*n, 7, 28*n + 14, 7, 28*n + 7, 0, WHITE);
-
-            if(bitRead(arrows[1], n)) dpPwd.fillTriangle(28*n, 56, 28*n + 14, 56, 28*n + 7, 63, WHITE);
-            dpPwd.drawTriangle(28*n, 56, 28*n + 14, 56, 28*n + 7, 63, WHITE);
-        }
-
-        dpPwd.display();
-        act = false;
     }
 };
