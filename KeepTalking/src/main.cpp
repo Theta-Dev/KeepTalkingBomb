@@ -5,9 +5,9 @@
 void setup()
 {
   gameBegin();
+  gameMenu();
   gameReset();
   gameSetup();
-  delay(1000);
   gameRun();
 }
 

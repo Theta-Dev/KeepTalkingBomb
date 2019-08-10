@@ -22,6 +22,8 @@ const uint8_t PROGMEM pgm_segChars[] =
 uint64_t startTime = 0;
 uint64_t setTime = 300000;
 uint8_t strikes;
+bool hcMode = 0;
+uint8_t bombType = 0;
 
 uint8_t serialNumber[8];
 bool serialEven;
@@ -35,17 +37,21 @@ uint8_t indicators;
 #define INDICATOR_CAR  2
 
 // Modules
+#include "Module.h"
+Module* modules[N_MODULE];
+
 #include "MTimer.h"
 #include "MPassword.h"
-#include "MWire.h"
-#include "MButton.h"
-#include "MSimon.h"
-#include "MKeypad.h"
-#include "MMaze.h"
 #include "MMorse.h"
-
-#define N_MODULE 8
-Module* modules[N_MODULE];
+#include "MPIN.h"
+#include "MWire.h"
+#include "MCWire.h"
+#include "MKeypad.h"
+#include "MMemory.h"
+#include "MOnFirst.h"
+#include "MSimon.h"
+#include "MMaze.h"
+#include "MButton.h"
 
 
 void gameBegin()
@@ -57,17 +63,21 @@ void gameBegin()
     outputBegin();
 
     // Initialize modules
-    modules[0] = new MTimer();
-    modules[1] = new MPassword();
-    modules[2] = new MMorse();
-    modules[3] = new MWire();
-    modules[4] = new MButton();
-    modules[5] = new MSimon();
-    modules[6] = new MKeypad();
-    modules[7] = new MMaze();
+    modules[TIMER_ID] = new MTimer();
+    modules[PWD_ID] = new MPassword();
+    modules[MORSE_ID] = new MMorse();
+    modules[PIN_ID] = new MPIN();
+    modules[WIRE_ID] = new MWire();
+    modules[CWIRE_ID] = new MCWire();
+    modules[KEYPAD_ID] = new MKeypad();
+    modules[MEMORY_ID] = new MMemory();
+    modules[ONFIRST_ID] = new MOnFirst();
+    modules[SIMON_ID] = new MSimon();
+    modules[MAZE_ID] = new MMaze();
+    modules[BUTTON_ID] = new MButton();
 }
 
-/*
+
 void gameMenu()
 {
     bool state;
@@ -78,13 +88,17 @@ void gameMenu()
         state = true;
         for(uint8_t i=0; i<N_MODULE; i++) {
             state = state && modules[i]->menu();
+            modules[i]->updateStatus();
         }
+        pixel.show();
 
     } while(!state);
-}*/
+}
 
 void gameReset()
 {
+    outputReset();
+
     // Set serial number
     serialEven = false;
     serialVowel = false;
@@ -113,9 +127,10 @@ void gameReset()
     // Reset all modules
     for(uint8_t i=0; i<N_MODULE; i++) {
         // Enable all modules (tmp)
-        if(i != 1 && i != 3) modules[i]->state = 1;
+        if(i != MORSE_ID && i != WIRE_ID) modules[i]->state = 1;
+        else modules[i]->state = 0;
 
-        if(modules[i]->state) modules[i]->reset();
+        if(modules[i]->state == 1) modules[i]->reset();
     }
 }
 

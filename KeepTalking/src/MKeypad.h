@@ -318,6 +318,11 @@ public:
         statusPixel = KEYPAD_PIXEL;
     }
 
+	bool menu()
+	{
+        return true;
+    }
+
     void reset()
     {
 		// Initialize variables

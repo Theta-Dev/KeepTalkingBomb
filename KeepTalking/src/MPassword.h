@@ -73,6 +73,11 @@ public:
         statusPixel = PWD_PIXEL;
     }
 
+    bool menu()
+    {
+        return true;
+    }
+
     void reset()
     {
         // Empty character array

@@ -25,9 +25,20 @@ private:
     uint64_t pressTime;
     uint8_t buttonState;
 
+    void setButtonColor(uint8_t c)
+    {
+        for(int i=0; i<BUTTON_NUMRGB; i++)
+            pixel.setPixelColor(BUTTON_RGB+i, colors[3*c], colors[3*c+1], colors[3*c+2]);
+    }
+
 public:
     MButton() {
         statusPixel = BUTTON_PIXEL;
+    }
+
+    bool menu()
+    {
+        return true;
     }
     
     void reset()
@@ -62,12 +73,6 @@ public:
     void setup()
     {
         state = 2;
-    }
-
-    void setButtonColor(uint8_t c)
-    {
-        for(int i=0; i<BUTTON_NUMRGB; i++)
-            pixel.setPixelColor(BUTTON_RGB+i, colors[3*c], colors[3*c+1], colors[3*c+2]);
     }
 
     void run()

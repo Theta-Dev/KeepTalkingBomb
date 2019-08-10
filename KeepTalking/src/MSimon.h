@@ -51,9 +51,25 @@ private:
     uint8_t seqIndex;   // Index for sequence display
     uint64_t seqTime;
 
+    uint8_t getSolution()
+    {
+        return pgm_read_byte_near(pgm_simon + SIMON_NBUTTON*3*serialVowel + SIMON_NBUTTON*strikes + sequence[seqPos]);
+        //return simon_map[serialVowel][strikes][seqPos];
+    }
+
+    void setLED(uint8_t c)
+    {
+        for(int i=0; i<SIMON_NBUTTON; i++) max.setLed(0, 7, i, i==c);
+    }
+
 public:
     MSimon() {
         statusPixel = SIMON_PIXEL;
+    }
+
+    bool menu()
+    {
+        return true;
     }
     
     void reset()
@@ -70,17 +86,6 @@ public:
     void setup()
     {
         state = 2;
-    }
-
-    uint8_t getSolution()
-    {
-        return pgm_read_byte_near(pgm_simon + SIMON_NBUTTON*3*serialVowel + SIMON_NBUTTON*strikes + sequence[seqPos]);
-        //return simon_map[serialVowel][strikes][seqPos];
-    }
-
-    void setLED(uint8_t c)
-    {
-        for(int i=0; i<SIMON_NBUTTON; i++) max.setLed(0, 7, i, i==c);
     }
 
     void run()

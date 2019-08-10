@@ -22,10 +22,39 @@ private:
     bool blinkState = false;
     uint8_t wireState;
 
+    uint8_t lastColoredWire(uint8_t c)
+    {
+        for(uint8_t i=WIRE_NUM-1; i>=0; i--) {
+            if(wires[i] == c) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    void checkWires()
+    {       
+        divergentWires = 0;
+        
+        for(uint8_t i=0; i<WIRE_NUM; i++) {
+            bitWrite(divergentWires, i, (wires[i] > 0) != inputPressed(WIRE_BUTTON+i));
+        }
+    }
+
+    void setWireRGB(uint8_t n, uint8_t r, uint8_t g=0, uint8_t b=0)
+    {
+        pixel.setPixelColor(WIRE_RGB + n, r, g, b);
+        pixel.setPixelColor(WIRE_RGB + WIRE_NUM + n, r, g, b);
+    }
 
 public:
     MWire() {
         statusPixel = WIRE_PIXEL;
+    }
+
+    bool menu()
+    {
+        return true;
     }
     
     void reset()
@@ -75,31 +104,6 @@ public:
             else if(wireColorCount[COLOR_RED] == 0) solution = 5;
             else solution = 3;
         }
-    }
-
-    uint8_t lastColoredWire(uint8_t c)
-    {
-        for(uint8_t i=WIRE_NUM-1; i>=0; i--) {
-            if(wires[i] == c) {
-                return i;
-            }
-        }
-        return 0;
-    }
-
-    void checkWires()
-    {       
-        divergentWires = 0;
-        
-        for(uint8_t i=0; i<WIRE_NUM; i++) {
-            bitWrite(divergentWires, i, (wires[i] > 0) != inputPressed(WIRE_BUTTON+i));
-        }
-    }
-
-    void setWireRGB(uint8_t n, uint8_t r, uint8_t g=0, uint8_t b=0)
-    {
-        pixel.setPixelColor(WIRE_RGB + n, r, g, b);
-        pixel.setPixelColor(WIRE_RGB + WIRE_NUM + n, r, g, b);
     }
 
     void setup()

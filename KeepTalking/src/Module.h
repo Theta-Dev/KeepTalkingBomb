@@ -1,7 +1,24 @@
 #pragma once
 #include <Arduino.h>
 
-#define MODULE_BLINKTIME 2000
+#define N_MODULE 12
+
+#define TIMER_ID 0
+#define PWD_ID 1
+#define MORSE_ID 2
+#define PIN_ID 3
+#define WIRE_ID 4
+#define CWIRE_ID 5
+#define KEYPAD_ID 6
+#define MEMORY_ID 7
+#define ONFIRST_ID 8
+#define SIMON_ID 9
+#define MAZE_ID 10
+#define BUTTON_ID 11
+
+#define MODULE_BLINKCTR_MAX 20
+#define MODULE_BLINKCTR_TIM 100
+
 #define MODULE_MELODY_DEFUSED 0
 #define MODULE_MELODY_STRIKE 1
 
@@ -22,28 +39,35 @@ public:
     uint8_t statusPixel = 255;
     uint64_t blinkTime = 0;
     uint8_t blinkState = 0;
+    uint8_t blinkCtr = 0;
 
     uint8_t melodyIndex = 0;
     uint8_t melodyEnd = 0;
     uint64_t melodyTime = 0;
 
+    virtual bool menu() = 0;
     virtual void reset() = 0;
     virtual void setup() = 0;
     virtual void run() = 0;
 
     void updateStatus() {
-        if(statusPixel == 255) return;
-
         uint64_t now = millis();
+        if(now - blinkTime >= MODULE_BLINKCTR_TIM) {
+            blinkTime = now;
+            blinkCtr++;
+            if(blinkCtr >= MODULE_BLINKCTR_MAX) {
+                blinkCtr = 0;
+                blinkState = 0;
+            }
+        }
+
+        if(statusPixel == 255) return;
 
         // Module in setup (orange)
         if(state == 1) pixel.setPixelColor(statusPixel, 180, 75, 0);
         // Module in operation (blue)
         else if(state == 2) {
-            if(blinkState == 1) {
-                if(now - blinkTime >= MODULE_BLINKTIME) blinkState = 0;
-                pixel.setPixelColor(statusPixel, 255, 0, 0);
-            }
+            if(blinkState == 1) pixel.setPixelColor(statusPixel, 255, 0, 0);
             else pixel.setPixelColor(statusPixel, 0, 0, 255);
         }
         // Module defused (green)
@@ -69,7 +93,7 @@ public:
     void add_strike() {
         strikes++;
         blinkState = 1;
-        blinkTime = millis();
+        blinkCtr = 0;
         melodyIndex = 2;
         melodyEnd = 3;
     }

@@ -61,6 +61,11 @@ public:
         statusPixel = MORSE_PIXEL;
     }
 
+    bool menu()
+    {
+        return true;
+    }
+
     void reset()
     {
         selection = 0;

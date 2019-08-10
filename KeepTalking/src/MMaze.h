@@ -102,6 +102,11 @@ public:
         statusPixel = MAZE_PIXEL;
     }
 
+    bool menu()
+    {
+        return true;
+    }
+
     void reset()
     {
         // Random maze
