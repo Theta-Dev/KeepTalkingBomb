@@ -388,9 +388,12 @@ public:
 				if(bitRead(pressedKeys, i)) dpKpd.drawRect((i>1)*(128-KEYPAD_SYMWIDTH), (i%2)*KEYPAD_SYMHEIGHT, KEYPAD_SYMWIDTH, KEYPAD_SYMHEIGHT, WHITE);
 
 				dpKpd.drawBitmap((i>1)*(128-KEYPAD_SYMWIDTH), (i%2)*KEYPAD_SYMHEIGHT, pgm_keypad_symbols + KEYPAD_SYMLENGTH*sym, KEYPAD_SYMWIDTH, KEYPAD_SYMHEIGHT, WHITE);
+
+				max.setLed(0, 4, 4+i, i<inputIndex);
 			}
 
 			dpKpd.display();
+
 			act = false;
 		}
     }

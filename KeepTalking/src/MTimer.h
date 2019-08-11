@@ -7,26 +7,25 @@ class MTimer : public Module
 private:
     void displayTime(uint64_t t)
     {   
-        //if(t >= 60000) {
-            uint16_t secs = t / 1000;
-            uint8_t minute = floor(secs / 60);
-            uint8_t second = secs % 60;
+        uint16_t secs = t / 1000;
+        uint8_t minute = floor(secs / 60);
+        uint8_t second = secs % 60;
 
-            timerDigits[0] = floor(minute / 10);
-            timerDigits[1] = minute % 10;
-            timerDigits[2] = floor(second / 10);
-            timerDigits[3] = second % 10;
-
+        timerDigits[0] = floor(minute / 10);
+        timerDigits[1] = minute % 10;
+        timerDigits[2] = floor(second / 10);
+        timerDigits[3] = second % 10;
+        
+        if(t >= 60000) {
             for(int i=0; i<4; i++) max.setDigit(0, i, timerDigits[i], i==1);
-        /*}
+        }
         else {
-            String zsecs = String((uint32_t) t/10);
-            
-            for(int i=3; i>=0; i--) {
-                timerDigits[i] = zsecs.charAt(zsecs.length()-4+i) - 48;
-                max.setDigit(0, i, timerDigits[i], i==0);
-            }
-        }*/
+            for(int i=0; i<2; i++) max.setDigit(0, i, timerDigits[i+2], i==0);
+
+            uint32_t hsecs = (t - 1000*secs) / 10;
+            max.setDigit(0, 2, floor(hsecs / 10), 0);
+            max.setDigit(0, 3, hsecs % 10, 0);
+        }
     }
 
 public:
@@ -57,9 +56,14 @@ public:
             displayTime(setTime - elapsedTime);
 
             // Display strike indicator
-            for(int i=0; i<2; i++) max.setLed(0, 5, 6+i, strikes>i);
-
-            if(strikes > MAX_STRIKES) state = 5;
+            if(hcMode) {
+                for(int i=0; i<2; i++) max.setLed(0, 5, 6+i, blinkCtr<10);
+                if(strikes > 0) state = 5;
+            }
+            else {
+                for(int i=0; i<2; i++) max.setLed(0, 5, 6+i, strikes>i);
+                if(strikes > MAX_STRIKES) state = 5;
+            }
         }
         else {
             displayTime(0);

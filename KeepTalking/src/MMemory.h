@@ -13,7 +13,6 @@ public:
 
     void menu()
     {
-        
     }
 
     void reset()
