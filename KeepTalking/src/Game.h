@@ -75,7 +75,10 @@ void setModule(uint8_t id, bool st)
 
 void toggleModule(uint8_t id)
 {
-    if(bombType == BOMBCUSTOM) setModule(id, modules[id]->state == 0);
+    if(bombType == BOMBCUSTOM) {
+        setModule(id, modules[id]->state == 0);
+        click();
+    }
 }
 
 void disableModules() {

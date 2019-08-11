@@ -129,7 +129,10 @@ bool menuMain()
             inc = -1;
             in = inputClicked(MENU_BUTTON_DOWN, MENU_NOPTIONS);
         }
-        if(menu_act == -2 && in > -1) menu_act = in;
+        if(in > -1) {
+            if(menu_act == -2) menu_act = in;
+            click();
+        }
 
         switch (in)
         {
@@ -172,6 +175,7 @@ bool menuMain()
                 menuState = 1;
                 menu_act = -1;
             }
+            click();
         }
     }
     else if(menuState == 1)
@@ -197,8 +201,12 @@ bool menuMain()
         {
             menuState = 0;
             menu_act = -1;
+            click();
         }
-        if(inputClicked(MENU_BUTTON_OK)) menuState = 2;
+        if(inputClicked(MENU_BUTTON_OK)) {
+            menuState = 2;
+            click();
+        }
     }
     return menuState == 2;
 }
