@@ -1,19 +1,17 @@
 #pragma once
 
-#define PIN_PIXEL 0
-
 class MPIN : public Module
 {
 private:
 
 public:
     MPIN() {
-        statusPixel = PIN_PIXEL;
+        slotID = 1;
     }
 
-    bool menu()
+    void menu()
     {
-        return true;
+        
     }
 
     void reset()

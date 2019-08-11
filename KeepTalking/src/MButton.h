@@ -1,7 +1,5 @@
 #pragma once
-#include "Module.h"
 
-#define BUTTON_PIXEL 18
 #define BUTTON_RGB 19
 #define BUTTON_NUMRGB 2
 #define BUTTON_BT 0
@@ -33,12 +31,12 @@ private:
 
 public:
     MButton() {
-        statusPixel = BUTTON_PIXEL;
+        slotID = 7;
     }
 
-    bool menu()
+    void menu()
     {
-        return true;
+        if(inputClicked(BUTTON_BT)) toggleModule(BUTTON_ID);
     }
     
     void reset()

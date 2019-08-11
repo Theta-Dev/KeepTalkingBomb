@@ -1,19 +1,17 @@
 #pragma once
 
-#define CWIRE_PIXEL 2
-
 class MCWire : public Module
 {
 private:
 
 public:
     MCWire() {
-        statusPixel = CWIRE_PIXEL;
+        slotID = 3;
     }
 
-    bool menu()
+    void menu()
     {
-        return true;
+        
     }
 
     void reset()

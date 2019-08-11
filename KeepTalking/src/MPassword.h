@@ -1,7 +1,5 @@
 #pragma once
-#include "Module.h"
 
-#define PWD_PIXEL 1
 #define PWD_BUTTON_UP 12
 #define PWD_BUTTON_DOWN 17
 #define PWD_BUTTON_OK 11
@@ -70,12 +68,12 @@ private:
 
 public:
     MPassword() {
-        statusPixel = PWD_PIXEL;
+        slotID = 2;
     }
 
-    bool menu()
+    void menu()
     {
-        return true;
+
     }
 
     void reset()

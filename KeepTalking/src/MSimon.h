@@ -1,5 +1,4 @@
 #pragma once
-#include "Module.h"
 
 #define SIMON_PIXEL 17
 #define SIMON_LENGTH 5
@@ -64,12 +63,12 @@ private:
 
 public:
     MSimon() {
-        statusPixel = SIMON_PIXEL;
+        slotID = 6;
     }
 
-    bool menu()
+    void menu()
     {
-        return true;
+        if(inputClicked(SIMON_BUTTON, SIMON_NBUTTON) > -1) toggleModule(SIMON_ID);
     }
     
     void reset()

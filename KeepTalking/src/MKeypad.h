@@ -1,7 +1,5 @@
 #pragma once
-#include "Module.h"
 
-#define KEYPAD_PIXEL 15
 #define KEYPAD_NSYMBOL 4
 
 #define KEYPAD_SYMWIDTH 32
@@ -315,12 +313,15 @@ private:
 
 public:
     MKeypad() {
-        statusPixel = KEYPAD_PIXEL;
+		slotID = 4;
     }
 
-	bool menu()
+	void menu()
 	{
-        return true;
+        if(inputClicked(keypad_buttons[0]) || inputClicked(keypad_buttons[2])) {
+			toggleModule(KEYPAD_ID);
+			menu_act = -1;
+		}
     }
 
     void reset()

@@ -32,13 +32,62 @@ uint8_t timerDigits[4];
 uint8_t batteryLevel;
 uint8_t indicators;
 
+#define NBOMBTYPES 4
+#define BOMBCUSTOM 3
+
 #define INDICATOR_PAR  0
 #define INDICATOR_FRK  1
 #define INDICATOR_CAR  2
 
+
 // Modules
 #include "Module.h"
 Module* modules[N_MODULE];
+bool module_slots_en[N_MODULE_SLOTS];
+
+bool enableModule(uint8_t id)
+{
+    if(module_slots_en[modules[id]->slotID]) return false;
+
+    modules[id]->state = 1;
+    module_slots_en[modules[id]->slotID] = 1;
+    return true;
+}
+
+void setModule(uint8_t id, bool st)
+{
+    if(modules[id]->state == st) return;
+    else if(!st) {
+        modules[id]->state = 0;
+        module_slots_en[modules[id]->slotID] = 0;
+    }
+    else {
+        for(uint8_t i=0; i<N_MODULE; i++) {
+            if(module_slots_en[modules[i]->slotID] == 1 && modules[id]->slotID == modules[i]->slotID) {
+                modules[i]->state = 0;
+                module_slots_en[modules[i]->slotID] = 0;
+            }
+        }
+        modules[id]->state = 1;
+        module_slots_en[modules[id]->slotID] = 1;
+    }
+}
+
+void toggleModule(uint8_t id)
+{
+    if(bombType == BOMBCUSTOM) setModule(id, modules[id]->state == 0);
+}
+
+void disableModules() {
+    for(uint8_t i=0; i<N_MODULE_SLOTS; i++) module_slots_en[i] = 0;
+    for(uint8_t i=0; i<N_MODULE; i++) modules[i]->state = (i==TIMER_ID);
+}
+
+void statusPixelReset() {
+    for(uint8_t i=0; i<N_MODULE_SLOTS; i++) pixel.setPixelColor(statusPixel[i], 0);
+}
+
+#include "Menu.h"
 
 #include "MTimer.h"
 #include "MPassword.h"
@@ -80,19 +129,21 @@ void gameBegin()
 
 void gameMenu()
 {
-    bool state;
+    disableModules();
+    menuReset();
     
-    do {
+    while(1) {
         inputUpdate();
-        
-        state = true;
+        statusPixelReset();
+
+        if(menuMain()) break;
+
         for(uint8_t i=0; i<N_MODULE; i++) {
-            state = state && modules[i]->menu();
-            modules[i]->updateStatus();
+            modules[i]->menu();
+            if(bombType == BOMBCUSTOM) modules[i]->updateStatus();
         }
         pixel.show();
-
-    } while(!state);
+    }
 }
 
 void gameReset()
@@ -123,13 +174,25 @@ void gameReset()
     indicators = random(256);
     for(int i=0; i<3; i++) max.setLed(0, 7, 4+i, bitRead(indicators, i));
 
+    // Enable modules
+    if(bombType != BOMBCUSTOM) {
+        disableModules();
+
+        for(uint8_t i=0; i<pgm_read_byte_near(pgm_bomb_types_n + bombType); i++) {
+            uint8_t rnd = random(1, N_MODULE);
+            while(1) {
+                if(enableModule(rnd)) break;
+                else {
+                    rnd++;
+                    if(rnd >= N_MODULE) rnd = 1;
+                }
+            }
+        }
+    }
+
 
     // Reset all modules
     for(uint8_t i=0; i<N_MODULE; i++) {
-        // Enable all modules (tmp)
-        if(i != MORSE_ID && i != WIRE_ID) modules[i]->state = 1;
-        else modules[i]->state = 0;
-
         if(modules[i]->state == 1) modules[i]->reset();
     }
 }
@@ -140,6 +203,7 @@ void gameSetup()
     
     do {
         inputUpdate();
+        statusPixelReset();
         state = true;
         
         for(uint8_t i=0; i<N_MODULE; i++)
@@ -161,6 +225,7 @@ void gameRun()
     
     do {
         inputUpdate();
+        statusPixelReset();
         
         state = true;
         for(uint8_t i=0; i<N_MODULE; i++)

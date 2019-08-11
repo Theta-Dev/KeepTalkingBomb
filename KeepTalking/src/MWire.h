@@ -1,7 +1,5 @@
 #pragma once
-#include "Module.h"
 
-#define WIRE_PIXEL 2
 #define WIRE_NUM 6
 #define WIRE_NUMCOLOR 6
 #define WIRE_BUTTON 26
@@ -49,12 +47,21 @@ private:
 
 public:
     MWire() {
-        statusPixel = WIRE_PIXEL;
+        slotID = 3;
+        for(uint8_t i=0; i<WIRE_NUM; i++) wires[i] = 0;
     }
 
-    bool menu()
+    void menu()
     {
-        return true;
+        uint8_t c = 0;
+        for(uint8_t i=0; i<WIRE_NUM; i++) {
+            if(inputPressed(WIRE_BUTTON+i)) {
+                c++;
+                setWireRGB(i, 255, 255, 255);
+            }
+            else setWireRGB(i, 0);
+        }
+        setModule(WIRE_ID, c==1);
     }
     
     void reset()
@@ -113,7 +120,7 @@ public:
             checkWires();
 
             if(divergentWires > 0) {
-                pixel.setPixelColor(WIRE_PIXEL, 180, 75, 0);
+                pixel.setPixelColor(statusPixel[slotID], 180, 75, 0);
 
                 for(uint8_t i=0; i<WIRE_NUM; i++) {
                     if(bitRead(divergentWires, i) && blinkState) setWireRGB(i, 0);
@@ -125,7 +132,7 @@ public:
                 wireState = 0;
             }
             else {
-                pixel.setPixelColor(WIRE_PIXEL, 0, 0, 255);
+                pixel.setPixelColor(statusPixel[slotID], 0, 0, 255);
 
                 for(uint8_t i=0; i<WIRE_NUM; i++) {
                     setWireRGB(i, colors[3*wires[i]], colors[3*wires[i]+1], colors[3*wires[i]+2]);

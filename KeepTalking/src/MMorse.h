@@ -1,7 +1,5 @@
 #pragma once
-#include "Module.h"
 
-#define MORSE_PIXEL 1
 #define MORSE_BUTTON_UP 12
 #define MORSE_BUTTON_DOWN 17
 #define MORSE_BUTTON_OK 11
@@ -58,12 +56,12 @@ private:
 
 public:
     MMorse() {
-        statusPixel = MORSE_PIXEL;
+        slotID = 2;
     }
 
-    bool menu()
+    void menu()
     {
-        return true;
+        
     }
 
     void reset()

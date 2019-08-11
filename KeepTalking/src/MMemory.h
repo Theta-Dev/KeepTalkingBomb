@@ -8,12 +8,12 @@ private:
 
 public:
     MMemory() {
-        statusPixel = PIN_PIXEL;
+        slotID = 4;
     }
 
-    bool menu()
+    void menu()
     {
-        return true;
+        
     }
 
     void reset()

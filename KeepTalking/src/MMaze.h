@@ -1,7 +1,5 @@
 #pragma once
-#include "Module.h"
 
-#define MAZE_PIXEL 16
 #define MAZE_MAX 1
 #define MAZE_BUTTON 22
 #define MAZE_NBUTTON 4
@@ -99,12 +97,12 @@ private:
 
 public:
     MMaze() {
-        statusPixel = MAZE_PIXEL;
+        slotID = 5;
     }
 
-    bool menu()
+    void menu()
     {
-        return true;
+        if(inputClicked(MAZE_BUTTON, MAZE_NBUTTON) > -1) toggleModule(MAZE_ID);
     }
 
     void reset()

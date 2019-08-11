@@ -30,6 +30,16 @@ const uint8_t colors[] = {
     128, 128, 0     // Yellow
 };
 
+const uint8_t statusPixel[] = {0, 0, 1, 2, 15, 16, 17, 18};
+
+#define PIXEL_MODULE1 0
+#define PIXEL_MODULE2 1
+#define PIXEL_MODULE3 2
+#define PIXEL_MODULE4 15
+#define PIXEL_MODULE5 16
+#define PIXEL_MODULE6 17
+#define PIXEL_MODULE7 18
+
 #define PIN_BUZZER 22
 #define PIN_LED_MORSE 13
 #define PIN_LED_BUTTON 10
@@ -51,7 +61,7 @@ void outputReset()
 
     for(int i=0; i<N_MAX; i++) max.clearDisplay(i);
 
-    for(int i=0; i<N_PIXEL; i++) pixel.setPixelColor(i, 0);
+    pixel.clear();
 
     for(int i=0; i<N_LED; i++) digitalWrite(i, 0);
     digitalWrite(PIN_BUZZER, 0);
@@ -83,4 +93,8 @@ void outputBegin()
     pinMode(PIN_LED_MORSE, OUTPUT);
 
     outputReset();
+}
+
+void click() {
+    tone(PIN_BUZZER, 1000, 10);
 }
