@@ -93,7 +93,7 @@ public:
             if(bitRead(character, 7 - 2*morseIndex)) {
                 bool signal = bitRead(character, 6 - 2*morseIndex);
                 
-                digitalWrite(PIN_LED_MORSE, 1);
+                max.setLed(MAX_LEDS, LED_MORSE_R, LED_MORSE_C, 1);
                 
                 if(signal) morseTime = now + MORSE_TIME*3;
                 else morseTime = now + MORSE_TIME;
@@ -119,7 +119,7 @@ public:
         }
         else if(now >= morseTime)
         {
-            digitalWrite(PIN_LED_MORSE, 0);
+            max.setLed(MAX_LEDS, LED_MORSE_R, LED_MORSE_C, 0);
 
             if(morseState == 2) morseTime = now + MORSE_TIME*5;
             else if(morseState == 3) morseTime = now + MORSE_TIME*10;

@@ -2,7 +2,6 @@
 
 #define BUTTON_RGB 19
 #define BUTTON_NUMRGB 2
-#define BUTTON_BT 0
 #define BUTTON_NUMCOLOR 5
 #define BUTTON_NUMLABEL 3
 #define BUTTON_TIME 1000
@@ -36,7 +35,7 @@ public:
 
     void menu()
     {
-        if(inputClicked(BUTTON_BT)) toggleModule(BUTTON_ID);
+        if(inputClicked(BTN_BUTTON)) toggleModule(BUTTON_ID);
     }
     
     void reset()
@@ -82,14 +81,14 @@ public:
         digitalWrite(PIN_LED_BUTTON+buttonLabel, 1);
 
         // Button logic
-        if(buttonState == 0 && inputPressed(BUTTON_BT)) {
+        if(buttonState == 0 && inputPressed(BTN_BUTTON)) {
             pressTime = now;
             buttonState = 1;
             click();
         }
         else if(buttonState == 1) {
             // Button pressed
-            if(inputPressed(BUTTON_BT)) {
+            if(inputPressed(BTN_BUTTON)) {
                 if(now-pressTime >= BUTTON_TIME) setButtonColor(lightColor);
             }
             else {

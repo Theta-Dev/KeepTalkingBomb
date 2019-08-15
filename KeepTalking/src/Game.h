@@ -43,34 +43,28 @@ uint8_t indicators;
 // Modules
 #include "Module.h"
 Module* modules[N_MODULE];
-bool module_slots_en[N_MODULE_SLOTS];
-
-bool enableModule(uint8_t id)
-{
-    if(module_slots_en[modules[id]->slotID]) return false;
-
-    modules[id]->state = 1;
-    module_slots_en[modules[id]->slotID] = 1;
-    return true;
-}
 
 void setModule(uint8_t id, bool st)
 {
     if(modules[id]->state == st) return;
-    else if(!st) {
-        modules[id]->state = 0;
-        module_slots_en[modules[id]->slotID] = 0;
-    }
-    else {
+    else if(st) {
         for(uint8_t i=0; i<N_MODULE; i++) {
-            if(module_slots_en[modules[i]->slotID] == 1 && modules[id]->slotID == modules[i]->slotID) {
+            if(modules[i]->state > 0 && modules[id]->slotID == modules[i]->slotID) {
                 modules[i]->state = 0;
-                module_slots_en[modules[i]->slotID] = 0;
             }
         }
-        modules[id]->state = 1;
-        module_slots_en[modules[id]->slotID] = 1;
     }
+    modules[id]->state = st;
+}
+
+bool enableModule(uint8_t id)
+{
+    for(uint8_t i=0; i<N_MODULE; i++) {
+        if(modules[i]->state > 0 && modules[id]->slotID == modules[i]->slotID) return false;
+    }
+
+    modules[id]->state = 1;
+    return true;
 }
 
 void toggleModule(uint8_t id)
@@ -82,7 +76,6 @@ void toggleModule(uint8_t id)
 }
 
 void disableModules() {
-    for(uint8_t i=0; i<N_MODULE_SLOTS; i++) module_slots_en[i] = 0;
     for(uint8_t i=0; i<N_MODULE; i++) modules[i]->state = (i==TIMER_ID);
 }
 
@@ -108,9 +101,8 @@ void statusPixelReset() {
 
 void gameBegin()
 {
-    pinMode(A14, INPUT);
     pinMode(A15, INPUT);
-    randomSeed(analogRead(A14) * analogRead(A15));
+    randomSeed(analogRead(A15));
 
     outputBegin();
 
@@ -152,6 +144,7 @@ void gameMenu()
 void gameReset()
 {
     outputReset();
+    inputReset();
 
     // Set serial number
     serialEven = false;
@@ -160,22 +153,20 @@ void gameReset()
     for(uint8_t i=0; i<4; i++) {
         serialNumber[i] = random(10, SEGCHARS_LENGTH+10);
         if(serialNumber[i] <= 12) serialVowel = true;
-        max.setRow(2, 7-i, pgm_read_byte_near(pgm_segChars + serialNumber[i]-SEGCHARS_LENGTH+1));
+        max.setRow(MAX_7SEG, 7-i, pgm_read_byte_near(pgm_segChars + serialNumber[i]-SEGCHARS_LENGTH+1));
     }
     for(uint8_t i=4; i<8; i++) {
         serialNumber[i] = random(10);
         serialEven = serialNumber[i] % 2 == 0;
-        max.setDigit(2, 7-i, serialNumber[i], 0);
+        max.setDigit(MAX_7SEG, 7-i, serialNumber[i], 0);
     }
 
     // Set indicators
     batteryLevel = random(1, 4);
-    max.setLed(0, 6, 6, batteryLevel>0);
-    max.setLed(0, 6, 7, batteryLevel>1);
-    max.setLed(0, 7, 7, batteryLevel>2);
+    for(uint8_t i=0; i<3; i++) max.setLed(MAX_LEDS, LED_BAT_R, LED_BAT_C+i, batteryLevel>i);
 
     indicators = random(256);
-    for(int i=0; i<3; i++) max.setLed(0, 7, 4+i, bitRead(indicators, i));
+    for(uint8_t i=0; i<3; i++) digitalWrite(PIN_LED_OUT+i, bitRead(indicators, i));
 
     // Enable modules
     if(bombType != BOMBCUSTOM) {

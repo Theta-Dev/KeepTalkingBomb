@@ -1,8 +1,6 @@
 #pragma once
 
-#define SIMON_PIXEL 17
 #define SIMON_LENGTH 5
-#define SIMON_BUTTON 38
 #define SIMON_NBUTTON 4
 
 #define SIMON_TIME_LIGHT 1000
@@ -58,7 +56,7 @@ private:
 
     void setLED(uint8_t c)
     {
-        for(int i=0; i<SIMON_NBUTTON; i++) max.setLed(0, 7, i, i==c);
+        for(int i=0; i<SIMON_NBUTTON; i++) max.setLed(MAX_LEDS, LED_SIMON_R, LED_SIMON_C+i, i==c);
     }
 
 public:
@@ -68,7 +66,7 @@ public:
 
     void menu()
     {
-        if(inputClicked(SIMON_BUTTON, SIMON_NBUTTON) > -1) toggleModule(SIMON_ID);
+        if(inputClicked(BTN_SIMON, SIMON_NBUTTON) > -1) toggleModule(SIMON_ID);
     }
     
     void reset()
@@ -124,7 +122,7 @@ public:
         }
 
         // Read buttons
-        int bt = inputClicked(SIMON_BUTTON, SIMON_NBUTTON);
+        int bt = inputClicked(BTN_SIMON, SIMON_NBUTTON);
 
         if(bt > -1) {
             // Check if button is correct

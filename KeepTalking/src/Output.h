@@ -7,10 +7,14 @@
 #include "..\lib\Adafruit_SSD1306\Adafruit_SSD1306.h"
 
 #define N_MAX 3
-#define N_PIXEL 21
+#define MAX_LEDS 0
+#define MAX_MATRIX 1
+#define MAX_7SEG 2
+LedControl max = LedControl(22, 24, 23, N_MAX);
 
-LedControl max = LedControl(15, 17, 16, N_MAX);
-Adafruit_NeoPixel pixel = Adafruit_NeoPixel(N_PIXEL, 14, NEO_GRB + NEO_KHZ800);
+#define N_PIXEL 21
+Adafruit_NeoPixel pixel = Adafruit_NeoPixel(N_PIXEL, 19, NEO_GRB + NEO_KHZ800);
+
 Adafruit_SSD1306 dpPwd = Adafruit_SSD1306(128, 64, &Wire, -1);
 Adafruit_SSD1306 dpKpd = Adafruit_SSD1306(128, 64, &Wire, -1);
 
@@ -32,19 +36,30 @@ const uint8_t colors[] = {
 
 const uint8_t statusPixel[] = {0, 0, 1, 2, 15, 16, 17, 18};
 
-#define PIXEL_MODULE1 0
-#define PIXEL_MODULE2 1
-#define PIXEL_MODULE3 2
-#define PIXEL_MODULE4 15
-#define PIXEL_MODULE5 16
-#define PIXEL_MODULE6 17
-#define PIXEL_MODULE7 18
+#define LED_KEYPAD_R 4
+#define LED_KEYPAD_C 0
+#define LED_PIN_R 4
+#define LED_PIN_C 4
+#define LED_PIN2_R 5
+#define LED_PIN2_C 6
+#define LED_WIRE_R 5
+#define LED_WIRE_C 0
+#define LED_WIRESTAR_R 6
+#define LED_WIRESTAR_C 0
+#define LED_STRIKE_R 6
+#define LED_STRIKE_C 6
+#define LED_SIMON_R 7
+#define LED_SIMON_C 0
+#define LED_MORSE_R 7
+#define LED_MORSE_C 4
+#define LED_BAT_R 7
+#define LED_BAT_C 5
 
-#define PIN_BUZZER 22
-#define PIN_LED_MORSE 13
-#define PIN_LED_BUTTON 10
-#define N_LED 3
-
+#define PIN_BUZZER 6
+#define PIN_LED_BUTTON 7
+#define N_LED_BUTTON 3
+#define PIN_LED_OUT 10
+#define N_LED_OUT 4
 
 void outputUpdate()
 {
@@ -63,9 +78,9 @@ void outputReset()
 
     pixel.clear();
 
-    for(int i=0; i<N_LED; i++) digitalWrite(i, 0);
+    for(int i=0; i<N_LED_BUTTON; i++) digitalWrite(i, 0);
+    for(int i=0; i<N_LED_OUT; i++) digitalWrite(i, 0);
     digitalWrite(PIN_BUZZER, 0);
-    digitalWrite(PIN_LED_MORSE, 0);
 
     outputUpdate();
 }
@@ -88,9 +103,9 @@ void outputBegin()
     dpKpd.begin(SSD1306_SWITCHCAPVCC, 0x3D);
 
     // Dout setup
-    for(int i=0; i<N_LED; i++) pinMode(PIN_LED_BUTTON+i, OUTPUT);
+    for(int i=0; i<N_LED_BUTTON; i++) pinMode(PIN_LED_BUTTON+i, OUTPUT);
+    for(int i=0; i<N_LED_OUT; i++) pinMode(N_LED_OUT+i, OUTPUT);
     pinMode(PIN_BUZZER, OUTPUT);
-    pinMode(PIN_LED_MORSE, OUTPUT);
 
     outputReset();
 }

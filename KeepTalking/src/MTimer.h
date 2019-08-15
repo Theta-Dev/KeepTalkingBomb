@@ -17,10 +17,10 @@ private:
         timerDigits[3] = second % 10;
         
         if(t >= 60000) {
-            for(int i=0; i<4; i++) max.setDigit(0, i, timerDigits[i], i==1);
+            for(int i=0; i<4; i++) max.setDigit(MAX_LEDS, i, timerDigits[i], i==1);
         }
         else {
-            for(int i=0; i<2; i++) max.setDigit(0, i, timerDigits[i+2], i==0);
+            for(int i=0; i<2; i++) max.setDigit(MAX_LEDS, i, timerDigits[i+2], i==0);
 
             uint32_t hsecs = (t - 1000*secs) / 10;
             max.setDigit(0, 2, floor(hsecs / 10), 0);
@@ -57,11 +57,11 @@ public:
 
             // Display strike indicator
             if(hcMode) {
-                for(int i=0; i<2; i++) max.setLed(0, 5, 6+i, blinkCtr<10);
+                for(int i=0; i<2; i++) max.setLed(MAX_LEDS, LED_STRIKE_R, LED_STRIKE_C+i, blinkCtr<10);
                 if(strikes > 0) state = 5;
             }
             else {
-                for(int i=0; i<2; i++) max.setLed(0, 5, 6+i, strikes>i);
+                for(int i=0; i<2; i++) max.setLed(MAX_LEDS, LED_STRIKE_R, LED_STRIKE_C+i, strikes>i);
                 if(strikes > MAX_STRIKES) state = 5;
             }
         }

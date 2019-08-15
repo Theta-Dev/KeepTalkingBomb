@@ -3,7 +3,7 @@
 #define MEMORY_NBUTTON 4
 #define MEMORY_NSTAGE 5
 
-const uint8_t memory_buttons[] = {32, 34, 35, 37};
+const uint8_t memory_buttons[] = {BTN_KEYPAD, BTN_KEYPAD+2, BTN_KEYPAD+3, BTN_KEYPAD+5};
 
 class MMemory : public Module
 {
@@ -46,7 +46,7 @@ public:
 
     void menu()
     {
-        if(inputClicked(33) || inputClicked(36)) {
+        if(inputClicked(BTN_KEYPAD+1) || inputClicked(BTN_KEYPAD+4)) {
 			toggleModule(MEMORY_ID);
 			menu_act = -1;
 		}
@@ -150,6 +150,8 @@ public:
             dpKpd.print(pressedLabels[stage]+1);*/
             
             dpKpd.display();
+
+            for(uint8_t i=0; i<4; i++) max.setLed(MAX_LEDS, LED_KEYPAD_R, LED_KEYPAD_C+i, i<stage);
 
             act = 0;
         }

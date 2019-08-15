@@ -2,7 +2,6 @@
 
 #define WIRE_NUM 6
 #define WIRE_NUMCOLOR 6
-#define WIRE_BUTTON 26
 #define WIRE_RGB 3
 
 
@@ -35,7 +34,7 @@ private:
         divergentWires = 0;
         
         for(uint8_t i=0; i<WIRE_NUM; i++) {
-            bitWrite(divergentWires, i, (wires[i] > 0) != inputPressed(WIRE_BUTTON+i));
+            bitWrite(divergentWires, i, (wires[i] > 0) != inputPressed(BTN_WIRE+i));
         }
     }
 
@@ -55,7 +54,7 @@ public:
     {
         uint8_t c = 0;
         for(uint8_t i=0; i<WIRE_NUM; i++) {
-            if(inputPressed(WIRE_BUTTON+i)) {
+            if(inputPressed(BTN_WIRE+i)) {
                 c++;
                 setWireRGB(i, 255, 255, 255);
             }
@@ -125,8 +124,8 @@ public:
                 for(uint8_t i=0; i<WIRE_NUM; i++) {
                     if(bitRead(divergentWires, i) && blinkState) setWireRGB(i, 0);
                     else setWireRGB(i, colors[3*wires[i]], colors[3*wires[i]+1], colors[3*wires[i]+2]);
-                    if(bitRead(divergentWires, i) && i >= nWires) max.setLed(0, 5, i, 1);
-                    else max.setLed(0, 5, i, 0);
+                    if(bitRead(divergentWires, i) && i >= nWires) max.setLed(MAX_LEDS, LED_WIRE_R, LED_WIRE_C+i, 1);
+                    else max.setLed(MAX_LEDS, LED_WIRE_R, LED_WIRE_C+i, 0);
                 }
                 blinkState = !blinkState;
                 wireState = 0;
@@ -136,7 +135,7 @@ public:
 
                 for(uint8_t i=0; i<WIRE_NUM; i++) {
                     setWireRGB(i, colors[3*wires[i]], colors[3*wires[i]+1], colors[3*wires[i]+2]);
-                    max.setLed(0, 5, i, 0);
+                    max.setLed(MAX_LEDS, LED_WIRE_R, LED_WIRE_C+i, 0);
                 }
                 
                 if(wireState < 1) wireState++;

@@ -1,7 +1,5 @@
 #pragma once
 
-#define MAZE_MAX 1
-#define MAZE_BUTTON 22
 #define MAZE_NBUTTON 4
 
 #define MAZE_NUM 9
@@ -102,7 +100,7 @@ public:
 
     void menu()
     {
-        if(inputClicked(MAZE_BUTTON, MAZE_NBUTTON) > -1) toggleModule(MAZE_ID);
+        if(inputClicked(BTN_MAZE, MAZE_NBUTTON) > -1) toggleModule(MAZE_ID);
     }
 
     void reset()
@@ -129,10 +127,10 @@ public:
         }
         
         // Display border
-        max.setRow(MAZE_MAX, 0, 255);
-        max.setRow(MAZE_MAX, 7, 255);
-        max.setColumn(MAZE_MAX, 0, 255);
-        max.setColumn(MAZE_MAX, 7, 255);
+        max.setRow(MAX_MATRIX, 0, 255);
+        max.setRow(MAX_MATRIX, 7, 255);
+        max.setColumn(MAX_MATRIX, 0, 255);
+        max.setColumn(MAX_MATRIX, 7, 255);
     }
 
     void setup()
@@ -143,7 +141,7 @@ public:
     void run()
     {
         // Read buttons
-        char in = inputClicked(MAZE_BUTTON, MAZE_NBUTTON);
+        char in = inputClicked(BTN_MAZE, MAZE_NBUTTON);
 
         if(in >= 0) {
             if(bitRead(getField(mazePos[0], mazePos[1]), in)) add_strike();
@@ -175,7 +173,7 @@ public:
                 else if(mazeTarget[0]==x && mazeTarget[1]==y) bitWrite(row, MAZE_SIZE-x, blinkState<10);
                 else bitWrite(row, MAZE_SIZE-x, bitRead(getField(x, y), 4));
             }
-            max.setRow(MAZE_MAX, y+1, row);
+            max.setRow(MAX_MATRIX, y+1, row);
         }
     }
 };

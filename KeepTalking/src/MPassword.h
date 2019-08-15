@@ -1,9 +1,5 @@
 #pragma once
 
-#define PWD_BUTTON_UP 12
-#define PWD_BUTTON_DOWN 17
-#define PWD_BUTTON_OK 11
-
 #define PWD_NUM_CHARS 5
 #define PWD_NUM_POSITIONS 6
 
@@ -210,21 +206,21 @@ public:
     void run()
     {
         // Handle button input
-        int in = inputClicked(PWD_BUTTON_UP, PWD_NUM_CHARS);
+        int in = inputClicked(BTN_PWD_UP, PWD_NUM_CHARS);
         if(in > -1) {
             if(selectors[in] >= PWD_NUM_POSITIONS-1) selectors[in] = 0;
             else selectors[in]++;
             act = true;
             click();
         }
-        in = inputClicked(PWD_BUTTON_DOWN, PWD_NUM_CHARS);
+        in = inputClicked(BTN_PWD_DOWN, PWD_NUM_CHARS);
         if(in > -1) {
             if(selectors[in] < 1) selectors[in] = PWD_NUM_POSITIONS-1;
             else selectors[in]--;
             act = true;
             click();
         }
-        if(inputClicked(PWD_BUTTON_OK)) {
+        if(inputClicked(BTN_PWD_OK)) {
             bool ok = true;
             for(uint8_t n=0; n<PWD_NUM_CHARS; n++) {
                 if(pgm_read_byte_near(pgm_passwords + PWD_NUM_CHARS*solution + n) != characters[n][selectors[n]]) {
@@ -239,7 +235,7 @@ public:
 
         for(uint8_t n=0; n<PWD_NUM_CHARS; n++) {
             for(uint8_t i=0; i<2; i++) {
-                bool v = inputPressed(PWD_BUTTON_UP + i*PWD_NUM_CHARS + n);
+                bool v = inputPressed(BTN_PWD_UP + i*PWD_NUM_CHARS + n);
                 if(v != bitRead(arrows[i], n)) {
                     bitWrite(arrows[i], n, v);
                     act = true;

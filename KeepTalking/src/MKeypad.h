@@ -9,7 +9,7 @@
 #define KEYPAD_TABLEROWS 7
 #define KEYPAD_TABLECOLS 6
 
-const uint8_t keypad_buttons[] = {32, 34, 35, 37};
+const uint8_t keypad_buttons[] = {BTN_KEYPAD, BTN_KEYPAD+2, BTN_KEYPAD+3, BTN_KEYPAD+5};
 
 const unsigned char PROGMEM pgm_keypad_symbols[] = {
 	// '00-copyright, 32x32px
@@ -389,7 +389,7 @@ public:
 
 				dpKpd.drawBitmap((i>1)*(128-KEYPAD_SYMWIDTH), (i%2)*KEYPAD_SYMHEIGHT, pgm_keypad_symbols + KEYPAD_SYMLENGTH*sym, KEYPAD_SYMWIDTH, KEYPAD_SYMHEIGHT, WHITE);
 
-				max.setLed(0, 4, 4+i, i<inputIndex);
+				max.setLed(MAX_LEDS, LED_KEYPAD_R, LED_KEYPAD_C+i, i<inputIndex);
 			}
 
 			dpKpd.display();

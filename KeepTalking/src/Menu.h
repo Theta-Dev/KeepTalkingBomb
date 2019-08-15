@@ -1,8 +1,5 @@
 #pragma once
 
-#define MENU_BUTTON_UP 12
-#define MENU_BUTTON_DOWN 17
-#define MENU_BUTTON_OK 11
 #define MENU_NBUTTON 10
 
 #define MENU_NOPTIONS 4
@@ -123,11 +120,11 @@ bool menuMain()
         
         // Handle buttons
         char inc = 1;
-        int in = inputClicked(MENU_BUTTON_UP, MENU_NOPTIONS);
+        int in = inputClicked(BTN_PWD_UP, MENU_NOPTIONS);
         if(in == -1)
         {
             inc = -1;
-            in = inputClicked(MENU_BUTTON_DOWN, MENU_NOPTIONS);
+            in = inputClicked(BTN_PWD_DOWN, MENU_NOPTIONS);
         }
         if(in > -1) {
             if(menu_act == -2) menu_act = in;
@@ -160,7 +157,7 @@ bool menuMain()
             break;
         }
 
-        if(inputClicked(MENU_BUTTON_OK))
+        if(inputClicked(BTN_PWD_OK))
         {
             if(bombType == BOMBCUSTOM) {
                 uint8_t c=0;
@@ -197,13 +194,13 @@ bool menuMain()
             menu_act = -2;
         }
 
-        if(inputClicked(MENU_BUTTON_UP, MENU_NBUTTON) > -1)
+        if(inputClicked(BTN_PWD_UP, MENU_NBUTTON) > -1)
         {
             menuState = 0;
             menu_act = -1;
             click();
         }
-        if(inputClicked(MENU_BUTTON_OK)) {
+        if(inputClicked(BTN_PWD_OK)) {
             menuState = 2;
             click();
         }
