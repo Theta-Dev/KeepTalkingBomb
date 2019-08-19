@@ -163,7 +163,9 @@ void gameReset()
 
     // Set indicators
     batteryLevel = random(1, 4);
-    for(uint8_t i=0; i<3; i++) max.setLed(MAX_LEDS, LED_BAT_R, LED_BAT_C+i, batteryLevel>i);
+    max.setLed(MAX_LEDS, LED_BAT1_R, LED_BAT1_C, batteryLevel>0);
+    max.setLed(MAX_LEDS, LED_BAT2_R, LED_BAT2_C, batteryLevel>1);
+    max.setLed(MAX_LEDS, LED_BAT3_R, LED_BAT3_C, batteryLevel>2);
 
     indicators = random(256);
     for(uint8_t i=0; i<3; i++) digitalWrite(PIN_LED_OUT+i, bitRead(indicators, i));

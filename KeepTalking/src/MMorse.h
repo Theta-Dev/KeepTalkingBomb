@@ -1,9 +1,5 @@
 #pragma once
 
-#define MORSE_BUTTON_UP 12
-#define MORSE_BUTTON_DOWN 17
-#define MORSE_BUTTON_OK 11
-
 #define MORSE_BASEFREQ 500
 #define MORSE_TIME 300
 
@@ -93,7 +89,7 @@ public:
             if(bitRead(character, 7 - 2*morseIndex)) {
                 bool signal = bitRead(character, 6 - 2*morseIndex);
                 
-                max.setLed(MAX_LEDS, LED_MORSE_R, LED_MORSE_C, 1);
+                digitalWrite(PIN_MORSE, 1);
                 
                 if(signal) morseTime = now + MORSE_TIME*3;
                 else morseTime = now + MORSE_TIME;
@@ -119,7 +115,7 @@ public:
         }
         else if(now >= morseTime)
         {
-            max.setLed(MAX_LEDS, LED_MORSE_R, LED_MORSE_C, 0);
+            digitalWrite(PIN_MORSE, 0);
 
             if(morseState == 2) morseTime = now + MORSE_TIME*5;
             else if(morseState == 3) morseTime = now + MORSE_TIME*10;
@@ -129,19 +125,19 @@ public:
         }
 
         // Handle buttons
-        if(inputClicked(MORSE_BUTTON_UP, PWD_NUM_CHARS) > -1) {
+        if(inputClicked(BTN_PWD_UP, PWD_NUM_CHARS) > -1) {
             selection++;
             if(selection >= MORSE_LENGTH) selection = 0;
             act = true;
             click();
         }
-        if(inputClicked(MORSE_BUTTON_DOWN, PWD_NUM_CHARS) > -1) {
+        if(inputClicked(BTN_PWD_DOWN, PWD_NUM_CHARS) > -1) {
             selection--;
             if(selection >= MORSE_LENGTH) selection = MORSE_LENGTH-1;
             act = true;
             click();
         }
-        if(inputClicked(MORSE_BUTTON_OK)) {
+        if(inputClicked(BTN_PWD_OK)) {
             if(selection == solution) defused();
             else add_strike();
         }

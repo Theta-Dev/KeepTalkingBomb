@@ -1,6 +1,5 @@
 #pragma once
 
-#define BUTTON_RGB 19
 #define BUTTON_NUMRGB 2
 #define BUTTON_NUMCOLOR 5
 #define BUTTON_NUMLABEL 3
@@ -25,7 +24,7 @@ private:
     void setButtonColor(uint8_t c)
     {
         for(int i=0; i<BUTTON_NUMRGB; i++)
-            pixel.setPixelColor(BUTTON_RGB+i, colors[3*c], colors[3*c+1], colors[3*c+2]);
+            pixel.setPixelColor(RGB_BUTTON+i, colors[3*c], colors[3*c+1], colors[3*c+2]);
     }
 
 public:

@@ -2,7 +2,6 @@
 
 #define WIRE_NUM 6
 #define WIRE_NUMCOLOR 6
-#define WIRE_RGB 3
 
 
 class MWire : public Module
@@ -16,7 +15,6 @@ private:
     uint8_t cutWires;
 
     uint64_t updateTime = 0;
-    bool blinkState = false;
     uint8_t wireState;
 
     uint8_t lastColoredWire(uint8_t c)
@@ -38,16 +36,15 @@ private:
         }
     }
 
-    void setWireRGB(uint8_t n, uint8_t r, uint8_t g=0, uint8_t b=0)
+    void setWireRGB(uint8_t n, uint8_t c)
     {
-        pixel.setPixelColor(WIRE_RGB + n, r, g, b);
-        pixel.setPixelColor(WIRE_RGB + WIRE_NUM + n, r, g, b);
+        pixel.setPixelColor(RGB_WIRE + n, colors[3*c], colors[3*c+1], colors[3*c+2]);
+        pixel.setPixelColor(RGB_WIRE + WIRE_NUM + n, colors[3*c], colors[3*c+1], colors[3*c+2]);
     }
 
 public:
     MWire() {
         slotID = 3;
-        for(uint8_t i=0; i<WIRE_NUM; i++) wires[i] = 0;
     }
 
     void menu()
@@ -56,11 +53,11 @@ public:
         for(uint8_t i=0; i<WIRE_NUM; i++) {
             if(inputPressed(BTN_WIRE+i)) {
                 c++;
-                setWireRGB(i, 255, 255, 255);
+                setWireRGB(i, COLOR_WHITE);
             }
             else setWireRGB(i, 0);
         }
-        setModule(WIRE_ID, c==1);
+        if(bombType == BOMBCUSTOM) setModule(WIRE_ID, c==1);
     }
     
     void reset()
@@ -118,28 +115,22 @@ public:
         {
             checkWires();
 
+            for(uint8_t i=0; i<WIRE_NUM; i++) {
+                if(bitRead(divergentWires, i)) setWireRGB(i, i<nWires ? COLOR_BLUE : COLOR_RED);
+                else setWireRGB(i, i<nWires ? COLOR_GREEN : 0);
+            }
+
             if(divergentWires > 0) {
                 pixel.setPixelColor(statusPixel[slotID], 180, 75, 0);
-
-                for(uint8_t i=0; i<WIRE_NUM; i++) {
-                    if(bitRead(divergentWires, i) && blinkState) setWireRGB(i, 0);
-                    else setWireRGB(i, colors[3*wires[i]], colors[3*wires[i]+1], colors[3*wires[i]+2]);
-                    if(bitRead(divergentWires, i) && i >= nWires) max.setLed(MAX_LEDS, LED_WIRE_R, LED_WIRE_C+i, 1);
-                    else max.setLed(MAX_LEDS, LED_WIRE_R, LED_WIRE_C+i, 0);
-                }
-                blinkState = !blinkState;
                 wireState = 0;
             }
             else {
                 pixel.setPixelColor(statusPixel[slotID], 0, 0, 255);
-
-                for(uint8_t i=0; i<WIRE_NUM; i++) {
-                    setWireRGB(i, colors[3*wires[i]], colors[3*wires[i]+1], colors[3*wires[i]+2]);
-                    max.setLed(MAX_LEDS, LED_WIRE_R, LED_WIRE_C+i, 0);
-                }
                 
                 if(wireState < 1) wireState++;
                 else {
+                    // Show wire colors and quit setup
+                    for(uint8_t i=0; i<WIRE_NUM; i++) setWireRGB(i, wires[i]);
                     wireState = 0;
                     state = 2;
                 }

@@ -96,8 +96,8 @@ public:
                     break;
                 case 2: // Stage 3
                     switch(numbers[stage]) {
-                        case 0: pressedButtons[stage] = pressedLabels[1]; break;
-                        case 1: pressedButtons[stage] = pressedLabels[0]; break;
+                        case 0: pressedButtons[stage] = labelPositions[pressedLabels[1]]; break;
+                        case 1: pressedButtons[stage] = labelPositions[pressedLabels[0]]; break;
                         case 2: pressedButtons[stage] = 2; break;
                         case 3: pressedButtons[stage] = labelPositions[3]; break;
                     }

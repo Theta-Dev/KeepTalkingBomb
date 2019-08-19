@@ -22,19 +22,6 @@ const uint8_t PROGMEM pgm_simon[] = {
     SIMON_YELLOW, SIMON_GREEN, SIMON_BLUE, SIMON_RED,
     SIMON_GREEN, SIMON_RED, SIMON_YELLOW, SIMON_BLUE
 };
-/*
-const uint8_t simon_map[2][3][4] = {
-  { // No Vowel
-    {SIMON_BLUE, SIMON_RED, SIMON_GREEN, SIMON_YELLOW}, // No Strikes
-    {SIMON_RED, SIMON_GREEN, SIMON_YELLOW, SIMON_BLUE}, // One Strike
-    {SIMON_YELLOW, SIMON_RED, SIMON_BLUE, SIMON_GREEN}, // Two Strikes
-  },
-  { // Vowel
-    {SIMON_BLUE, SIMON_GREEN, SIMON_YELLOW, SIMON_RED}, // No Strikes
-    {SIMON_YELLOW, SIMON_RED, SIMON_BLUE, SIMON_GREEN}, // One Strike
-    {SIMON_GREEN, SIMON_BLUE, SIMON_YELLOW, SIMON_RED}, // Two Strikes
-  },
-};*/
 
 
 class MSimon : public Module
@@ -51,7 +38,6 @@ private:
     uint8_t getSolution()
     {
         return pgm_read_byte_near(pgm_simon + SIMON_NBUTTON*3*serialVowel + SIMON_NBUTTON*strikes + sequence[seqPos]);
-        //return simon_map[serialVowel][strikes][seqPos];
     }
 
     void setLED(uint8_t c)
@@ -139,7 +125,7 @@ public:
                     seqIndex = 0;
                     seqState = 3;
                 }
-                tone(22, 400+100*bt, 200);
+                tone(PIN_BUZZER, 400+100*bt, 200);
                 if(seqProg >= SIMON_LENGTH) {
                     setLED(5);
                     defused();
