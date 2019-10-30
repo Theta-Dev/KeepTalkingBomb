@@ -36,8 +36,8 @@ uint8_t indicators;
 #define BOMBCUSTOM 3
 
 #define INDICATOR_PAR  0
-#define INDICATOR_FRK  1
-#define INDICATOR_CAR  2
+#define INDICATOR_FRK  2
+#define INDICATOR_CAR  3
 
 
 // Modules
@@ -101,6 +101,7 @@ void statusPixelReset() {
 
 void gameBegin()
 {
+    pinMode(A0, INPUT);
     pinMode(A15, INPUT);
     randomSeed(analogRead(A15));
 
@@ -168,7 +169,7 @@ void gameReset()
     max.setLed(MAX_LEDS, LED_BAT3_R, LED_BAT3_C, batteryLevel>2);
 
     indicators = random(256);
-    for(uint8_t i=0; i<3; i++) digitalWrite(PIN_LED_OUT+i, bitRead(indicators, i));
+    for(uint8_t i=0; i<N_LED_OUT; i++) digitalWrite(PIN_LED_OUT+i, bitRead(indicators, i));
 
     // Enable modules
     if(bombType != BOMBCUSTOM) {

@@ -52,7 +52,7 @@ private:
 
 public:
     MMorse() {
-        slotID = 2;
+        slotID = 1;
     }
 
     void menu()

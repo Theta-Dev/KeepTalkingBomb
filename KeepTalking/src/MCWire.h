@@ -57,7 +57,7 @@ private:
 
 public:
     MCWire() {
-        slotID = 3;
+        slotID = 5;
     }
 
     void menu()

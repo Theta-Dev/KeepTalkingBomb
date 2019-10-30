@@ -194,7 +194,7 @@ private:
 
 public:
     MOnFirst() {
-        slotID = 4;
+        slotID = 3;
     }
 
     void menu()

@@ -89,7 +89,9 @@ bool menuMain()
                 }
                 break;
             case 5:
-                dpPwd.print("Welcome to KTANE");
+                //dpPwd.print("Welcome to KTANE");
+                dpPwd.print("Battery: ");
+                dpPwd.print(analogRead(A0));
                 break;
             case 6:
                 dpPwd.print("No modules activated");
@@ -100,6 +102,9 @@ bool menuMain()
             dpPwd.display();
 
             dpKpd.clearDisplay();
+            // Display test (tmp)
+            dpKpd.drawRect(0, 0, 128, 64, WHITE);
+            
             if(bombType == BOMBCUSTOM)
             {
                 dpKpd.setTextSize(2);

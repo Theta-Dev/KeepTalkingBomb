@@ -44,7 +44,7 @@ private:
 
 public:
     MWire() {
-        slotID = 3;
+        slotID = 5;
     }
 
     void menu()

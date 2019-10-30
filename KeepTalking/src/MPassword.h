@@ -64,7 +64,7 @@ private:
 
 public:
     MPassword() {
-        slotID = 2;
+        slotID = 1;
     }
 
     void menu()

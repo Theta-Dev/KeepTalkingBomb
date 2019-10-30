@@ -4,10 +4,11 @@
 #define BUTTON_NUMCOLOR 5
 #define BUTTON_NUMLABEL 3
 #define BUTTON_TIME 1000
+#define BUTTON_BRIGHTNESS 0.5
 
 #define BUTTON_DETONATE 0
-#define BUTTON_HOLD     1
-#define BUTTON_ABORT    2
+#define BUTTON_ABORT    1
+#define BUTTON_HOLD     2
 
 
 class MButton : public Module
@@ -24,7 +25,7 @@ private:
     void setButtonColor(uint8_t c)
     {
         for(int i=0; i<BUTTON_NUMRGB; i++)
-            pixel.setPixelColor(RGB_BUTTON+i, colors[3*c], colors[3*c+1], colors[3*c+2]);
+            pixel.setPixelColor(RGB_BUTTON+i, colors[3*c]*BUTTON_BRIGHTNESS, colors[3*c+1]*BUTTON_BRIGHTNESS, colors[3*c+2]*BUTTON_BRIGHTNESS);
     }
 
 public:

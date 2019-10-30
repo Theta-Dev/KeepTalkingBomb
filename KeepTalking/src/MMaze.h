@@ -95,7 +95,7 @@ private:
 
 public:
     MMaze() {
-        slotID = 5;
+        slotID = 6;
     }
 
     void menu()

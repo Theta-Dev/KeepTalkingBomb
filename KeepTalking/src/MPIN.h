@@ -34,7 +34,7 @@ private:
 
 public:
     MPIN() {
-        slotID = 1;
+        slotID = 4;
     }
 
     void menu()

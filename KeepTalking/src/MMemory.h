@@ -41,7 +41,7 @@ private:
 
 public:
     MMemory() {
-        slotID = 4;
+        slotID = 3;
     }
 
     void menu()
