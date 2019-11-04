@@ -111,16 +111,15 @@ public:
             }
 
             if(divergentWires > 0) {
-                pixel.setPixelColor(statusPixel[slotID], 180, 75, 0);
+                pixel.setPixelColor(statusPixel[slotID], 180*pixelB, 75*pixelB, 0);
                 wireState = 0;
             }
             else {
-                pixel.setPixelColor(statusPixel[slotID], 0, 0, 255);
+                pixel.setPixelColor(statusPixel[slotID], 0, 0, 255*pixelB);
                 
                 if(wireState < 1) wireState++;
                 else {
-                    // Show wire colors and quit setup
-                    showWireColors();
+                    // quit setup
                     wireState = 0;
                     state = 2;
                 }
@@ -131,6 +130,8 @@ public:
 
     void run()
     {
+        showWireColors();
+        
         checkWires();
 
         if(millis() - updateTime >= 500)

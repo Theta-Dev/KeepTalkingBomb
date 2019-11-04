@@ -4,7 +4,7 @@
 #define BUTTON_NUMCOLOR 5
 #define BUTTON_NUMLABEL 3
 #define BUTTON_TIME 1000
-#define BUTTON_BRIGHTNESS 0.5
+#define BUTTON_BRIGHTNESS 1.8
 
 #define BUTTON_DETONATE 0
 #define BUTTON_ABORT    1
@@ -25,7 +25,7 @@ private:
     void setButtonColor(uint8_t c)
     {
         for(int i=0; i<BUTTON_NUMRGB; i++)
-            pixel.setPixelColor(RGB_BUTTON+i, colors[3*c]*BUTTON_BRIGHTNESS, colors[3*c+1]*BUTTON_BRIGHTNESS, colors[3*c+2]*BUTTON_BRIGHTNESS);
+            pixel.setPixelColor(RGB_BUTTON+i, colors[3*c]*pixelB*BUTTON_BRIGHTNESS, colors[3*c+1]*pixelB*BUTTON_BRIGHTNESS, colors[3*c+2]*pixelB*BUTTON_BRIGHTNESS);
     }
 
 public:

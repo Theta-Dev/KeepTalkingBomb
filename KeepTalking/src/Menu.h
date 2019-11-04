@@ -1,6 +1,8 @@
 #pragma once
 
 #define MENU_NBUTTON 10
+#define MENU_BUTTON_NUMRGB 2
+#define MENU_BUTTON_BRIGHTNESS 1.8
 
 #define MENU_NOPTIONS 4
 #define MENU_TIMEINC 30000
@@ -89,9 +91,12 @@ bool menuMain()
                 }
                 break;
             case 5:
-                //dpPwd.print("Welcome to KTANE");
-                dpPwd.print("Battery: ");
-                dpPwd.print(analogRead(A0));
+                if(batVoltage > 0.1) {
+                    dpPwd.print("Battery: ");
+                    dpPwd.print(batVoltage, 2);
+                    dpPwd.print("V");
+                }
+                else dpPwd.print("Welcome to KTANE");
                 break;
             case 6:
                 dpPwd.print("No modules activated");
@@ -180,35 +185,112 @@ bool menuMain()
             click();
         }
     }
-    else if(menuState == 1)
-    {
-        if(menu_act > -2)
-        {
-            dpPwd.clearDisplay();
-            dpPwd.setTextColor(WHITE);
-            dpPwd.setCursor(0, 0);
-            dpPwd.setTextSize(2);
-            dpPwd.print("Ready?");
+    return menuState == 1;
+}
 
-            dpPwd.setCursor(0, 30);
-            dpPwd.setTextSize(1);
-            dpPwd.println("Let the games begin!");
-            dpPwd.println("Press the red button to start");
+bool menuSetup()
+{
+    // Update display
+    if(menu_act > -2) {
+        dpPwd.setTextColor(WHITE);
+        dpPwd.setCursor(0, 0);
+        dpPwd.setTextSize(2);
+        dpPwd.print("Setup");
 
-            dpPwd.display();
-            menu_act = -2;
-        }
+        dpPwd.setCursor(0, 30);
+        dpPwd.setTextSize(1);
+        dpPwd.println("Insert the wires");
+        dpPwd.println("into the module.");
 
-        if(inputClicked(BTN_PWD_UP, MENU_NBUTTON) > -1)
-        {
-            menuState = 0;
-            menu_act = -1;
-            click();
-        }
-        if(inputClicked(BTN_PWD_OK)) {
-            menuState = 2;
-            click();
-        }
+        dpPwd.display();
+        menu_act = -2;
     }
-    return menuState == 2;
+
+    if(inputClicked(BTN_PWD_UP, MENU_NBUTTON+1) > -1) {
+        click();
+        return true;
+    }
+    return false;
+}
+
+uint8_t menuStart()
+{
+    // Update display
+    if(menu_act > -2) {
+        dpPwd.setTextColor(WHITE);
+        dpPwd.setCursor(0, 0);
+        dpPwd.setTextSize(2);
+        dpPwd.print("Ready?");
+
+        dpPwd.setCursor(0, 30);
+        dpPwd.setTextSize(1);
+        dpPwd.println("Let the games begin!");
+        dpPwd.println("Press the red button to start");
+
+        dpPwd.display();
+        menu_act = -2;
+    }
+
+    for(int i=0; i<MENU_BUTTON_NUMRGB; i++)
+        pixel.setPixelColor(RGB_BUTTON+i, 255*pixelB*MENU_BUTTON_BRIGHTNESS, 0, 0);
+    
+    if(inputClicked(BTN_BUTTON)) {
+        click();
+        return 1;
+    }
+    if(inputClicked(BTN_PWD_UP, MENU_NBUTTON) > -1) {
+        click();
+        return 2;
+    }
+    return 0;
+}
+
+bool menuFinal(uint8_t state)
+{
+    // Update display
+    if(menu_act > -2) {
+        dpPwd.setTextColor(WHITE);
+        dpPwd.setCursor(0, 0);
+        dpPwd.setTextSize(2);
+        if(state == 1) dpPwd.print("Defused.");
+        else dpPwd.print("BOOM.");
+
+        dpPwd.setCursor(0, 30);
+        dpPwd.setTextSize(1);
+        if(state == 1) {
+            uint64_t elapsedTime = millis() - startTime;
+            uint16_t secs = elapsedTime / 1000;
+            uint8_t minute = floor(secs / 60);
+            uint8_t second = secs % 60;
+
+            dpPwd.println("Awesome! You finished");
+            dpPwd.print("in ");
+            dpPwd.print((uint8_t) floor(minute / 10));
+            dpPwd.print((uint8_t) minute % 10);
+            dpPwd.print(":");
+            dpPwd.print((uint8_t) floor(second / 10));
+            dpPwd.print((uint8_t) second % 10);
+            dpPwd.println(" minutes");
+            
+            if(hcMode) dpPwd.println("in Hardcore mode.");
+            else {
+                dpPwd.print("with ");
+                dpPwd.print(strikes);
+                dpPwd.println(" Strikes.");
+            }
+        }
+        else {
+            dpPwd.println("The bomb exploded");
+            dpPwd.println("Better luck next time");
+        }
+
+        dpPwd.display();
+        menu_act = -2;
+    }
+
+    if(inputClicked(BTN_PWD_UP, MENU_NBUTTON+1) > -1) {
+        click();
+        return true;
+    }
+    return false;
 }

@@ -125,12 +125,6 @@ public:
                 if(mazeTarget[i] >= MAZE_SIZE) mazeTarget[i] = 0;
             }
         }
-        
-        // Display border
-        max.setRow(MAX_MATRIX, 0, 255);
-        max.setRow(MAX_MATRIX, 7, 255);
-        max.setColumn(MAX_MATRIX, 0, 255);
-        max.setColumn(MAX_MATRIX, 7, 255);
     }
 
     void setup()
@@ -167,7 +161,9 @@ public:
         
         // Display maze
         for(uint8_t y=0; y<MAZE_SIZE; y++) {
-            uint8_t row=B10000001;
+            //uint8_t row=B10000001;
+            uint8_t row = 0;
+            
             for(uint8_t x=0; x<MAZE_SIZE; x++) {
                 if(mazePos[0]==x && mazePos[1]==y) bitWrite(row, MAZE_SIZE-x, blinkState%2);
                 else if(mazeTarget[0]==x && mazeTarget[1]==y) bitWrite(row, MAZE_SIZE-x, blinkState<10);
@@ -175,5 +171,8 @@ public:
             }
             max.setRow(MAX_MATRIX, y+1, row);
         }
+        // Display border
+        //max.setRow(MAX_MATRIX, 0, 255);
+        //max.setRow(MAX_MATRIX, 7, 255);
     }
 };

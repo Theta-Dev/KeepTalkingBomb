@@ -5,12 +5,12 @@
 void setup()
 {
   gameBegin();
-  gameMenu();
-  gameReset();
-  gameSetup();
-  gameRun();
 }
 
 void loop()
 {
+  gameMenu();
+  gameReset();
+  if(gameSetup() == 2) return;
+  gameFinal(gameRun());
 }

@@ -65,8 +65,6 @@ public:
             else solution[i] = abs(y + sds*bitRead(indicators, INDICATOR_CAR) - batteryLevel) % 10;
         }
 
-        updateLeds();
-
         /*
         // Debug info
         dpKpd.clearDisplay();
@@ -82,7 +80,7 @@ public:
     }
 
     void run()
-    {
+    {   
         // Handle button input
         char in = inputClicked(BTN_PIN, PIN_NBUTTON);
 
@@ -97,7 +95,7 @@ public:
                 else defused();
             }
             else add_strike();
-            updateLeds();
         }
+        updateLeds();
     }
 };

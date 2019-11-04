@@ -59,7 +59,7 @@ private:
     uint8_t solution;
     uint8_t selectors[PWD_NUM_CHARS];
 
-    bool act = true;
+    bool act;
     uint8_t arrows[2];
 
 public:
@@ -74,6 +74,8 @@ public:
 
     void reset()
     {
+        act = true;
+        
         // Empty character array
         for(uint8_t n=0; n<PWD_NUM_CHARS; n++) {
             for(uint8_t i=0; i<PWD_NUM_POSITIONS; i++) characters[n][i] = 0;

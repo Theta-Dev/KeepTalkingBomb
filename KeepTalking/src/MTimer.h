@@ -38,12 +38,14 @@ public:
     void menu()
     {
         displayTime(setTime);
+        brightnessAdjust();
     }
 
     void setup()
     {
         state = 4;
         displayTime(setTime);
+        brightnessAdjust();
     }
 
     void run()
@@ -70,5 +72,15 @@ public:
             state = 5;
         }
         
+        brightnessAdjust();
+    }
+
+private:
+    void brightnessAdjust()
+    {
+        if(inputClicked(BTN_TIMER)) {
+            brightness = (brightness >= BRIGHTNESS_MAX) ? BRIGHTNESS_MIN : brightness+1;
+            updateBrightness();
+        }
     }
 };

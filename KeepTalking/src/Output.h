@@ -15,6 +15,13 @@ LedControl max = LedControl(22, 24, 23, N_MAX);
 #define N_PIXEL 21
 Adafruit_NeoPixel pixel = Adafruit_NeoPixel(N_PIXEL, 25, NEO_GRB + NEO_KHZ800);
 
+#define PIXEL_B_INC 0.04
+float pixelB = PIXEL_B_INC;
+uint8_t brightness = 3;
+
+#define BRIGHTNESS_MAX 10
+#define BRIGHTNESS_MIN 1
+
 Adafruit_SH1106 dpPwd(-1);
 Adafruit_SH1106 dpKpd(-1);
 
@@ -70,6 +77,12 @@ const uint8_t statusPixel[] = {0, 0, 1, 2, 3, 4, 17, 18};
 #define PIN_LED_BUTTON 9
 #define N_LED_BUTTON 3
 
+void updateBrightness() {
+    max.setIntensity(MAX_LEDS, brightness);
+    max.setIntensity(MAX_MATRIX, brightness);
+    pixelB = PIXEL_B_INC*brightness;
+}
+
 void outputUpdate()
 {
     pixel.show();
@@ -103,9 +116,8 @@ void outputBegin()
         max.clearDisplay(i);
         max.shutdown(i, false);
     }
-    max.setIntensity(MAX_LEDS, 4);
-    max.setIntensity(MAX_MATRIX, 6);
     max.setIntensity(MAX_7SEG, 15);
+    updateBrightness();
 
     // Pixel setup
     pixel.begin();

@@ -75,14 +75,14 @@ public:
         if(slotID == 0) return;
 
         // Module in setup (orange)
-        if(state == 1) pixel.setPixelColor(statusPixel[slotID], 36, 15, 0);
+        if(state == 1) pixel.setPixelColor(statusPixel[slotID], 180*pixelB, 75*pixelB, 0);
         // Module in operation (blue)
         else if(state == 2) {
-            if(blinkState == 1) pixel.setPixelColor(statusPixel[slotID], 51, 0, 0);
-            else pixel.setPixelColor(statusPixel[slotID], 0, 0, 51);
+            if(blinkState == 1) pixel.setPixelColor(statusPixel[slotID], 255*pixelB, 0, 0);
+            else pixel.setPixelColor(statusPixel[slotID], 0, 0, 255*pixelB);
         }
         // Module defused (green)
-        else if(state == 3) pixel.setPixelColor(statusPixel[slotID], 0, 51, 0);
+        else if(state == 3) pixel.setPixelColor(statusPixel[slotID], 0, 255*pixelB, 0);
     }
 
     void defused() {
